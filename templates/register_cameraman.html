@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <style>
+        input[type=text],
+        input[type="password"],
+        input[type=number],
+        textarea{
+            background: lightcyan;
+            width: 97%;
+            padding: 2%;
+            border-color: cyan;
+        }
+
+        input:hover[type=text],
+        input:hover[type="password"],
+        input:hover[type=number],
+        textarea{
+            border-color: black;
+            border-width: 1%;
+        }
+        
+        body{
+            font-size: large;
+            color: blue;
+            background-color: azure;
+        }
+        
+    </style>
+    <title>Registration for cameraman</title>
+</head>
+<body>
+    <center>    
+        <h1>Please Register yourself</h1>
+    </center>
+    <form method="post" enctype="multipart/form-data">
+        <table align="center">
+            <tr>
+                <td>Name</td>
+                <td><input type="text" name="name" required></td>
+            </tr>
+            <tr>
+                <td>Email</td>
+                <td><input type="text" name="email" required></td>
+            </tr>
+            <tr>
+                <td>Mobile Number</td>
+                <td><input type="text" name="mobile" required></td>
+            </tr>
+            <tr>
+                <td>Password</td>
+                <td><input type="password" name="password" required></td>
+            </tr>
+            <tr>
+            <td>Confirm Password</td>
+            <td><input type="password" name="confirm_password" required></td>
+            </tr>
+            <tr>
+                <td>City</td>
+                <td><input type="text" name="city" required></td>
+            </tr>
+            <tr>
+                <td>Experience (Years)</td>
+                <td><input type="number" name="exp" required></td>
+            </tr>
+            <tr>
+                <td>Price (₹)</td>
+                <td><input type="number" name="price" required></td>
+            </tr>
+            <tr>
+                <td>Description</td>
+                <td><textarea name="description" rows="4" cols="40" required></textarea></td>
+            </tr>
+            <tr>
+                <td>Portfolio Image</td>
+                <td><input type="file" name="portfolio_img"></td>
+            </tr>
+            <tr>
+                <td rowspan="2">
+                    <button type="submit">Registration</button>
+                </td>
+            </tr>
+        </table>
+    </form>
+</body>
+</html>

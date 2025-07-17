@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cameraman Profile</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <style>
+        .profile-img {
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .profile-img:hover {
+            transform: scale(1.05);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+        }
+        .logout-btn {
+            transition: background-color 0.3s ease, transform 0.2s ease;
+        }
+        .logout-btn:hover {
+            transform: translateY(-2px);
+        }
+        .container {
+            animation: fadeIn 0.5s ease-in-out;
+        }
+        @keyframes fadeIn {
+            0% { opacity: 0; transform: translateY(10px); }
+            100% { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
+<body class="bg-gray-100 min-h-screen flex items-center justify-center p-4">
+    <div class="container max-w-lg mx-auto bg-white rounded-2xl shadow-xl p-8 md:p-10">
+        <div class="text-center">
+            <h2 class="text-3xl font-bold text-gray-800 mb-6">Welcome, {{ cameraman.name }}</h2>
+            {% if cameraman.portfolio_img %}
+                <img class="profile-img mx-auto rounded-lg w-48 h-48 object-cover mb-6" src="{{ url_for('static', filename='images/' + cameraman.portfolio_img) }}" alt="Portfolio Image">
+            {% else %}
+                <div class="bg-gray-200 rounded-lg w-48 h-48 mx-auto mb-6 flex items-center justify-center text-gray-500">No Image</div>
+            {% endif %}
+        </div>
+
+        <div class="space-y-4">
+            <div class="flex items-center">
+                <span class="font-semibold text-gray-700 w-32">Mobile:</span>
+                <span class="text-gray-600">{{ cameraman.mobile }}</span>
+            </div>
+            <div class="flex items-center">
+                <span class="font-semibold text-gray-700 w-32">Email:</span>
+                <span class="text-gray-600">{{ cameraman.email }}</span>
+            </div>
+            <div class="flex items-center">
+                <span class="font-semibold text-gray-700 w-32">City:</span>
+                <span class="text-gray-600">{{ cameraman.city }}</span>
+            </div>
+            <div class="flex items-center">
+                <span class="font-semibold text-gray-700 w-32">Experience:</span>
+                <span class="text-gray-600">{{ cameraman.exp }} years</span>
+            </div>
+            <div class="flex items-center">
+                <span class="font-semibold text-gray-700 w-32">Price:</span>
+                <span class="text-gray-600">₹{{ cameraman.price }}</span>
+            </div>
+            <div class="flex items-start">
+                <span class="font-semibold text-gray-700 w-32">Description:</span>
+                <span class="text-gray-600">{{ cameraman.description }}</span>
+            </div>
+        </div>
+
+        <div class="mt-8 text-center">
+            <button class="logout-btn bg-blue-600 text-white font-semibold py-2 px-6 rounded-lg hover:bg-blue-700" onclick="document.getElementById('logout-form').submit()">Logout</button>
+            <form id="logout-form" action="/logout" method="post" class="hidden"></form>
+        </div>
+    </div>
+</body>
+</html>
