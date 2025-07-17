@@ -69,13 +69,16 @@
         <h2>Login</h2>
         <form method="POST" action="/login">
             <label for="mobileno">Mobile Number</label>
-            <input type="text" id="mobileno" name="mobileno" required pattern="[0-9]{10}" placeholder="Enter mobile number">
+            <input type="text" id="mobileno" name="mobile" required placeholder="Enter mobile number">
 
             <label for="password">Password</label>
             <input type="password" id="password" name="password" required placeholder="Enter password">
 
             <button type="submit">Login</button>
         </form>
+        {% if error %}
+            <p style="color: red; text-align: center;">{{ error }}</p>
+        {% endif %}
     </div>
 </body>
 </html>

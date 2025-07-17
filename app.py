@@ -15,6 +15,20 @@ os.makedirs(app.config['images'], exist_ok=True)
 
 db.init_app(app)
 
+@app.route('/login_user', methods=['GET', 'POST'])
+def login_user():
+    error=None
+    if request.method == 'POST':
+        mobile = request.form['mobile']
+        password=request.form['password']
+        user = User.query.get(mobile)
+        if user and user.password == password:
+            session['user_mobile'] = user.mobile
+            return "Welcome " + user.name
+        else:
+            error = "Invalid Credentials"
+    return render_template('login_user.html', error=error)
+
 @app.route('/cameraman_profile/<mobile>')
 def profile_cameraman(mobile):
     if 'cameraman_mobile' not in session or session['cameraman_mobile']!=mobile:
