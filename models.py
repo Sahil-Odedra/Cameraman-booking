@@ -7,7 +7,7 @@ class User(db.Model):
     mobile=db.Column(db.String(10),primary_key=True)
     password=db.Column(db.String(50),nullable=False)
     name=db.Column(db.String(50),nullable=False)
-
+    city=db.Column(db.String(50),nullable=False)
 class Cameraman(db.Model):
     __tablename__ = 'cameraman'
 
