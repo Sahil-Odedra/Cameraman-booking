@@ -2,47 +2,99 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Cameraman Login</title>
-    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: azure;
+            color: blue;
+            margin: 0;
+        }
+
+        .switch-account {
+            text-align: right;
+            padding: 15px;
+            background-color: lightcyan;
+        }
+
+        .switch-account a {
+            color: darkblue;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        .container {
+            width: 350px;
+            margin: 40px auto;
+            padding: 30px;
+            background-color: white;
+            border: 1px solid cyan;
+            border-radius: 10px;
+            box-shadow: 2px 2px 10px lightgray;
+        }
+
+        input[type="text"],
+        input[type="password"] {
+            width: 100%;
+            padding: 10px;
+            background: lightcyan;
+            border: 1px solid cyan;
+            margin-bottom: 15px;
+        }
+
+        input:hover {
+            border-color: black;
+        }
+
+        button {
+            background-color: blue;
+            color: white;
+            border: none;
+            padding: 10px;
+            width: 100%;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: darkblue;
+        }
+
+        .link {
+            color: black;
+            text-align: center;
+            margin-top: 10px;
+        }
+
+        .link a {
+            color: darkblue;
+            text-decoration: none;
+        }
+
+        .error {
+            color: red;
+            text-align: center;
+        }
+    </style>
 </head>
-<body class="min-h-screen bg-gray-100 flex items-center justify-center p-4">
-    <div class="w-full max-w-md bg-white rounded-lg shadow-lg p-8">
-        <h2 class="text-2xl font-bold text-center text-gray-800 mb-6">Cameraman Login</h2>
-        <form method="POST" class="space-y-6">
-            <div>
-                <label for="mobile" class="block text-sm font-medium text-gray-700">Mobile</label>
-                <input 
-                    type="text" 
-                    name="mobile" 
-                    id="mobile" 
-                    required 
-                    class="mt-1 w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-200"
-                    placeholder="Enter your mobile number"
-                >
-            </div>
+<body>
+    <div class="switch-account">
+        <a href="{{ url_for('login_user') }}">Switch to User Login</a>
+    </div>
 
-            <div>
-                <label for="password" class="block text-sm font-medium text-gray-700">Password</label>
-                <input 
-                    type="password" 
-                    name="password" 
-                    id="password" 
-                    required 
-                    class="mt-1 w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-200"
-                    placeholder="Enter your password"
-                >
-            </div>
-
-            <button 
-                type="submit" 
-                class="w-full bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700 transition duration-200 font-medium"
-            >
-                Login
-            </button>
+    <div class="container">
+        <h2 style="text-align: center;">Cameraman Login</h2>
+        <form method="POST">
+            <input type="text" name="mobile" placeholder="Enter your mobile number" required>
+            <input type="password" name="password" placeholder="Enter your password" required>
+            <button type="submit">Login</button>
         </form>
 
-        <p class="text-red-500 text-center mt-4">{{ error }}</p>
+        <div class="link">  
+            <p>Don't have an account? <a href="{{ url_for('register_cameraman') }}">Register</a></p>
+        </div>
+        {% if error %}
+            <p class="error">{{ error }}</p>
+        {% endif %}
     </div>
 </body>
 </html>

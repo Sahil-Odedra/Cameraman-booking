@@ -1,4 +1,3 @@
-<!-- templates/register_user.html -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -48,6 +47,16 @@
         button:hover {
             background: #6a11cb;
         }
+                .link {
+            color: black;
+            text-align: center;
+            margin-top: 10px;
+        }
+
+        .link a {
+            color: darkblue;
+            text-decoration: none;
+        }
     </style>
 </head>
 <body>
@@ -58,7 +67,7 @@
             <input type="text" name="name" required>
 
             <label>Mobile Number:</label>
-            <input type="text" name="mobile" pattern="[0-9]{10}" required>
+            <input type="text" name="mobile" required>
 
             <label>City:</label>
             <input type="text" name="city" required>
@@ -71,6 +80,9 @@
 
             <button type="submit">Register</button>
         </form>
+        <div class="link">  
+            <p>Have an account? <a href="{{ url_for('login_user') }}">Login</a></p>
+        </div>
     </div>
 </body>
 </html>
