@@ -5,6 +5,7 @@ from flask import request
 import os
 from datetime import datetime
 from models import db, User, Cameraman, Booking
+from flask import flash, redirect, url_for, session, request
 from werkzeug.utils import secure_filename
 
 app = Flask(__name__)
@@ -18,6 +19,69 @@ app.config["SQLALCHEMY_DATABASE_URI"] = config.SQLALCHEMY_DATABASE_URI
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = config.SQLALCHEMY_TRACK_MODIFICATIONS
 
 db.init_app(app)
+
+
+@app.route('/home')
+def home_user():
+    if 'user_mobile' not in session:
+        flash('Please log in to view this page.', 'error')
+        return redirect(url_for('login_user'))
+
+    search_city = request.args.get('city')
+    search_price_max = request.args.get('price_max', type=int)
+    search_date_str = request.args.get('date')
+
+    query = Cameraman.query
+
+    if search_city:
+        query = query.filter(Cameraman.city.ilike(f'%{search_city}%'))
+
+    if search_price_max:
+        query = query.filter(Cameraman.price <= search_price_max)
+        
+    if search_date_str:
+        try:
+            # Convert the date string from the form into a Python date object
+            booking_date_obj = datetime.strptime(search_date_str, '%Y-%m-%d').date()
+            
+            # This subquery creates a list of all cameraman IDs who are already booked
+            # on the selected date with a 'confirmed' status.
+            booked_cameramen_subquery = db.session.query(Booking.cameraman_id).filter(
+                Booking.booking_date == booking_date_obj,
+                Booking.status == 'confirmed'
+            ).subquery()
+            
+            # This updates the main query to exclude any cameraman whose ID is in the "booked" list.
+            query = query.filter(Cameraman.id.notin_(booked_cameramen_subquery))
+        except ValueError:
+            # This handles cases where the user enters an invalid date format.
+            flash('Invalid date format provided. Please use YYYY-MM-DD.', 'error')
+            pass
+
+    # Step 4: Execute the final, filtered query to get the results
+    filtered_cameramen = query.all()
+    
+    # This dictionary helps remember the user's search terms and repopulate the form
+    search_values = {
+        'city': search_city,
+        'price_max': search_price_max,
+        'date': search_date_str
+    }
+
+    # Step 5: Render the home.html template, passing the list of cameramen and the search values
+    return render_template('home.html', cameramen=filtered_cameramen, search_values=search_values)
+
+
+@app.route('/view_cameraman_profile/<mobile>')
+def view_cameraman_profile(mobile):
+    if 'user_mobile' not in session:
+        flash('Please log in to view profiles.', 'error')
+        return redirect(url_for('login_user'))
+
+    # .get_or_404() will show a "Not Found" page if no cameraman with that mobile exists.
+    cameraman = Cameraman.query.get_or_404(mobile)
+    
+    return render_template('view_cameraman_profile.html', cameraman=cameraman)
 
 
 @app.route("/register_user",methods=['POST','GET'])
@@ -50,7 +114,7 @@ def login_user():
         user = User.query.get(mobile)
         if user and user.password == password:
             session['user_mobile'] = user.mobile
-            return "Welcome " + user.name
+            return redirect(url_for('home_user'))
         else:
             error = "Invalid Credentials"
     return render_template('login_user.html', error=error)
@@ -124,13 +188,7 @@ def register_cameraman():
 
         return render_template('profile_cameraman.html', cameraman=new_cameraman)
     return render_template('register_cameraman.html')
-
-
-@app.route('/home')
-def home_user():
-    if 'user_mobile' not in session:
-        return render_template('login_user.html')
-    
+   
 
 if __name__ == "__main__":
     app.run(debug=True)

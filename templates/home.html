@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Home</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Montserrat', 'Segoe UI', Arial, sans-serif;
+            background: linear-gradient(-45deg, #e0eafc, #cfdef3, #a1c4fd, #c2e9fb);
+            background-size: 400% 400%;
+            animation: gradientBG 15s ease infinite;
+            margin: 0;
+            padding: 0;
+        }
+        @keyframes gradientBG {
+            0% {background-position: 0% 50%;}
+            50% {background-position: 100% 50%;}
+            100% {background-position: 0% 50%;}
+        }
+        nav {
+            background: rgba(37, 117, 252, 0.95);
+            color: #fff;
+            padding: 18px 0;
+            text-align: center;
+            box-shadow: 0 2px 16px rgba(40, 60, 120, 0.12);
+            font-size: 18px;
+            letter-spacing: 1px;
+        }
+        nav a, nav button {
+            color: #fff;
+            text-decoration: none;
+            margin: 0 22px;
+            font-size: 18px;
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-family: inherit;
+            font-weight: 600;
+            transition: color 0.2s;
+        }
+        nav button:hover, nav a:hover {
+            color: #ffe082;
+            text-decoration: underline;
+        }
+        .container {
+            max-width: 950px;
+            margin: 48px auto;
+            background: rgba(255,255,255,0.7);
+            border-radius: 24px;
+            box-shadow: 0 12px 40px rgba(40, 60, 120, 0.18);
+            padding: 40px 36px;
+            backdrop-filter: blur(8px);
+        }
+        h1 {
+            color: #2575fc;
+            text-align: center;
+            margin-bottom: 30px;
+            font-size: 2.5rem;
+            font-weight: 700;
+            letter-spacing: 1px;
+        }
+        h2 {
+            color: #2575fc;
+            text-align: center;
+            margin-bottom: 24px;
+            font-size: 1.5rem;
+            font-weight: 600;
+        }
+        form {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            justify-content: center;
+            align-items: center;
+            margin-bottom: 36px;
+            background: rgba(255,255,255,0.5);
+            border-radius: 16px;
+            padding: 18px 12px;
+            box-shadow: 0 2px 12px rgba(40, 60, 120, 0.07);
+        }
+        form label {
+            font-size: 16px;
+            color: #444;
+            margin-right: 6px;
+            font-weight: 500;
+        }
+        form input[type="text"],
+        form input[type="number"],
+        form input[type="date"] {
+            padding: 12px;
+            border: 1px solid #e0e0e0;
+            border-radius: 10px;
+            background: #f7f8fa;
+            font-size: 16px;
+            min-width: 150px;
+            transition: border-color 0.2s, box-shadow 0.2s;
+            box-shadow: 0 1px 4px rgba(37,117,252,0.04);
+        }
+        form input:focus {
+            border-color: #2575fc;
+            outline: none;
+            box-shadow: 0 2px 8px rgba(37,117,252,0.10);
+        }
+        form button {
+            padding: 12px 32px;
+            background: linear-gradient(90deg, #6a11cb 0%, #2575fc 100%);
+            color: #fff;
+            border: none;
+            border-radius: 10px;
+            font-size: 17px;
+            font-weight: 700;
+            cursor: pointer;
+            box-shadow: 0 2px 8px rgba(40, 60, 120, 0.10);
+            transition: background 0.2s, transform 0.15s;
+        }
+        form button:hover {
+            background: linear-gradient(90deg, #2575fc 0%, #6a11cb 100%);
+            transform: scale(1.06);
+        }
+        .cameramen-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(270px, 1fr));
+            gap: 28px;
+        }
+        .cameraman-card {
+            background: rgba(255,255,255,0.85);
+            border-radius: 18px;
+            box-shadow: 0 4px 24px rgba(40, 60, 120, 0.13);
+            padding: 28px 18px 22px 18px;
+            text-align: center;
+            transition: transform 0.18s, box-shadow 0.18s;
+            position: relative;
+        }
+        .cameraman-card:hover {
+            transform: translateY(-6px) scale(1.04);
+            box-shadow: 0 10px 32px rgba(37,117,252,0.18);
+        }
+        .card-img {
+            width: 110px;
+            height: 110px;
+            border-radius: 50%;
+            object-fit: cover;
+            margin: 0 auto 18px auto;
+            border: 4px solid #fff;
+            box-shadow: 0 4px 16px rgba(37,117,252,0.10);
+            background: #e0eafc;
+        }
+        .cameraman-card h3 {
+            margin: 0 0 10px 0;
+            color: #2575fc;
+            font-size: 1.3rem;
+            font-weight: 600;
+        }
+        .cameraman-card p {
+            margin: 7px 0;
+            color: #444;
+            font-size: 15.5px;
+        }
+        .cameraman-card a {
+            display: inline-block;
+            margin-top: 14px;
+            padding: 9px 22px;
+            background: linear-gradient(90deg, #2575fc 0%, #6a11cb 100%);
+            color: #fff;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 15px;
+            box-shadow: 0 2px 8px rgba(37,117,252,0.08);
+            transition: background 0.2s, transform 0.15s;
+        }
+        .cameraman-card a:hover {
+            background: linear-gradient(90deg, #6a11cb 0%, #2575fc 100%);
+            transform: scale(1.08);
+        }
+        .no-results {
+            text-align: center;
+            color: #888;
+            font-size: 18px;
+            margin-top: 36px;
+            grid-column: 1 / -1;
+        }
+        .flash-messages {
+            list-style: none;
+            padding: 0;
+            margin-bottom: 20px;
+        }
+        .flash-messages li {
+            padding: 15px;
+            border-radius: 8px;
+            text-align: center;
+            font-weight: 600;
+        }
+        .flash-messages .error {
+            background-color: #f8d7da;
+            color: #721c24;
+        }
+        .flash-messages .success {
+             background-color: #d4edda;
+            color: #155724;
+        }
+        @media (max-width: 700px) {
+            .container { padding: 10px 2px; }
+            form { flex-direction: column; gap: 12px; }
+            .cameramen-list { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+    <nav>
+        <a href="{{ url_for('home_user') }}">Home</a> |
+        <a href="#">My Bookings</a> |
+        <form action="{{ url_for('logout') }}" method="POST" style="display: inline;">
+            <button type="submit">Logout</button>
+        </form>
+    </nav>
+    <div class="container">
+        <h1>Find a Cameraman</h1>
+
+        <!-- Flash Messages -->
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                <ul class="flash-messages">
+                {% for category, message in messages %}
+                    <li class="{{ category }}">{{ message }}</li>
+                {% endfor %}
+                </ul>
+            {% endif %}
+        {% endwith %}
+
+        <form method="GET" action="{{ url_for('home_user') }}">
+            <div>
+                <label for="city">City:</label>
+                <input type="text" name="city" id="city" value="{{ search_values.city or '' }}" placeholder="Enter city">
+            </div>
+            <div>
+                <label for="price_max">Max Price:</label>
+                <input type="number" name="price_max" id="price_max" value="{{ search_values.price_max or '' }}" placeholder="Max Price (₹)">
+            </div>
+            <div>
+                <label for="date">Available On:</label>
+                <input type="date" name="date" id="date" value="{{ search_values.date or '' }}">
+            </div>
+            <div>
+                <button type="submit">Search</button>
+            </div>
+        </form>
+
+        <h2>Available Cameramen</h2>
+
+        <div class="cameramen-list">
+            {% for cameraman in cameramen %}
+                <div class="cameraman-card">
+                    <img class="card-img" src="{{ url_for('static', filename='images/' + cameraman.portfolio_img if cameraman.portfolio_img else 'images/default_avatar.png') }}" 
+                         alt="Photo of {{ cameraman.name }}">
+                    
+                    <h3>{{ cameraman.name }}</h3>
+                    <p>City: {{ cameraman.city }}</p>
+                    <p>Price: ₹{{ cameraman.price }}</p>
+                    
+                    <a href="{{ url_for('view_cameraman_profile', mobile=cameraman.mobile) }}">View Profile</a>
+
+                </div>
+            {% else %}
+                <div class="no-results">
+                    <p>No cameramen found matching your criteria.</p>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+</body>
+</html>
