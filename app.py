@@ -3,6 +3,7 @@ from flask_sqlalchemy import SQLAlchemy
 import config
 from flask import request
 import os
+from datetime import datetime
 from models import db, User, Cameraman, Booking
 from werkzeug.utils import secure_filename
 
@@ -17,6 +18,7 @@ app.config["SQLALCHEMY_DATABASE_URI"] = config.SQLALCHEMY_DATABASE_URI
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = config.SQLALCHEMY_TRACK_MODIFICATIONS
 
 db.init_app(app)
+
 
 @app.route("/register_user",methods=['POST','GET'])
 def register_user():
@@ -85,9 +87,11 @@ def login_cameraman():
             error = "Invalid Credential"
     return render_template('login_cameraman.html', error=error)
 
+
 @app.route('/')
 def home():
     return redirect(url_for('login_user'))
+
 
 @app.route('/register_cameraman', methods=['GET', 'POST'])
 def register_cameraman():
@@ -120,6 +124,13 @@ def register_cameraman():
 
         return render_template('profile_cameraman.html', cameraman=new_cameraman)
     return render_template('register_cameraman.html')
+
+
+@app.route('/home')
+def home_user():
+    if 'user_mobile' not in session:
+        return render_template('login_user.html')
+    
 
 if __name__ == "__main__":
     app.run(debug=True)
