@@ -105,6 +105,45 @@ def register_user():
     return render_template('user_register.html')
 
 
+@app.route('/book/<string:cameraman_mobile>', methods=['GET', 'POST'])
+def book_cameraman(cameraman_mobile):
+    if 'user_mobile' not in session:
+        flash('You must be logged in to book a cameraman.', 'error')
+        return redirect(url_for('login_user'))
+
+    cameraman = Cameraman.query.get_or_404(cameraman_mobile)
+
+    # Step 2: This block runs when the user submits the booking form.
+    if request.method == 'POST':
+        booking_date_str = request.form.get('booking_date')
+        
+        # A simple validation to ensure a date was selected.
+        if not booking_date_str:
+            flash('Please select a date for the booking.', 'error')
+            return redirect(url_for('book_cameraman', cameraman_mobile=cameraman.mobile))
+
+        booking_date = datetime.strptime(booking_date_str, '%Y-%m-%d').date()
+
+        # Create a new booking object with all the required details.
+        new_booking = Booking(
+            user_mobile=session['user_mobile'],
+            cameraman_mobile=cameraman.mobile,
+            booking_date=booking_date,
+            price=cameraman.price,
+            status='pending'  # All new bookings start as 'pending' until the cameraman confirms.
+        )
+
+        # Add the new booking to the database and commit the change.
+        db.session.add(new_booking)
+        db.session.commit()
+
+        flash(f'Your booking request for {cameraman.name} has been sent!', 'success')
+        return redirect(url_for('home_user')) # Redirect to the home page after a successful booking.
+
+    # Step 3: If it's a GET request, just show the booking form.
+    return render_template('book_cameraman.html', cameraman=cameraman)
+
+
 @app.route('/login_user', methods=['GET', 'POST'])
 def login_user():
     error = None
