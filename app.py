@@ -28,47 +28,30 @@ def home_user():
         return redirect(url_for('login_user'))
 
     search_city = request.args.get('city')
-    search_price_max = request.args.get('price_max', type=int)
-    search_date_str = request.args.get('date')
+    max_price = request.args.get('price_max', type=int)
+    search_date = request.args.get('date')
 
     query = Cameraman.query
 
     if search_city:
         query = query.filter(Cameraman.city.ilike(f'%{search_city}%'))
-
-    if search_price_max:
-        query = query.filter(Cameraman.price <= search_price_max)
-        
-    if search_date_str:
+    if max_price:
+        query = query.filter(Cameraman.price <= max_price)
+    if search_date:
         try:
-            # Convert the date string from the form into a Python date object
-            booking_date_obj = datetime.strptime(search_date_str, '%Y-%m-%d').date()
+            booking_date_obj = datetime.strptime(search_date, '%Y-%m-%d').date()
             
-            # This subquery creates a list of all cameraman IDs who are already booked
-            # on the selected date with a 'confirmed' status.
-            booked_cameramen_subquery = db.session.query(Booking.cameraman_id).filter(
-                Booking.booking_date == booking_date_obj,
-                Booking.status == 'confirmed'
-            ).subquery()
+            booked_cameramen_subquery = db.session.query(Booking.cameraman_id).filter(Booking.booking_date == booking_date_obj, Booking.status == 'confirmed').subquery()
             
-            # This updates the main query to exclude any cameraman whose ID is in the "booked" list.
             query = query.filter(Cameraman.id.notin_(booked_cameramen_subquery))
         except ValueError:
-            # This handles cases where the user enters an invalid date format.
             flash('Invalid date format provided. Please use YYYY-MM-DD.', 'error')
             pass
 
-    # Step 4: Execute the final, filtered query to get the results
     filtered_cameramen = query.all()
     
-    # This dictionary helps remember the user's search terms and repopulate the form
-    search_values = {
-        'city': search_city,
-        'price_max': search_price_max,
-        'date': search_date_str
-    }
+    search_values = {'city': search_city, 'price_max': max_price, 'date': search_date}
 
-    # Step 5: Render the home.html template, passing the list of cameramen and the search values
     return render_template('home.html', cameramen=filtered_cameramen, search_values=search_values)
 
 
@@ -78,7 +61,6 @@ def view_cameraman_profile(mobile):
         flash('Please log in to view profiles.', 'error')
         return redirect(url_for('login_user'))
 
-    # .get_or_404() will show a "Not Found" page if no cameraman with that mobile exists.
     cameraman = Cameraman.query.get_or_404(mobile)
     
     return render_template('view_cameraman_profile.html', cameraman=cameraman)
@@ -113,34 +95,29 @@ def book_cameraman(cameraman_mobile):
 
     cameraman = Cameraman.query.get_or_404(cameraman_mobile)
 
-    # Step 2: This block runs when the user submits the booking form.
     if request.method == 'POST':
         booking_date_str = request.form.get('booking_date')
         
-        # A simple validation to ensure a date was selected.
         if not booking_date_str:
             flash('Please select a date for the booking.', 'error')
             return redirect(url_for('book_cameraman', cameraman_mobile=cameraman.mobile))
 
         booking_date = datetime.strptime(booking_date_str, '%Y-%m-%d').date()
 
-        # Create a new booking object with all the required details.
         new_booking = Booking(
             user_mobile=session['user_mobile'],
             cameraman_mobile=cameraman.mobile,
             booking_date=booking_date,
             price=cameraman.price,
-            status='pending'  # All new bookings start as 'pending' until the cameraman confirms.
+            status='pending' 
         )
 
-        # Add the new booking to the database and commit the change.
         db.session.add(new_booking)
         db.session.commit()
 
         flash(f'Your booking request for {cameraman.name} has been sent!', 'success')
-        return redirect(url_for('home_user')) # Redirect to the home page after a successful booking.
-
-    # Step 3: If it's a GET request, just show the booking form.
+        return redirect(url_for('home_user'))
+   
     return render_template('book_cameraman.html', cameraman=cameraman)
 
 
