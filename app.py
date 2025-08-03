@@ -121,6 +121,19 @@ def book_cameraman(cameraman_mobile):
     return render_template('book_cameraman.html', cameraman=cameraman)
 
 
+@app.route('/my_bookings')
+def my_bookings():
+    if 'user_mobile' not in session:
+        flash('You need to be logged in to view your bookings.', 'error')
+        return redirect(url_for('login_user'))
+
+    user_bookings = db.session.query(Booking, Cameraman).join(
+        Cameraman, Booking.cameraman_mobile == Cameraman.mobile
+    ).filter(Booking.user_mobile == session['user_mobile']).all()
+
+    return render_template('my_bookings.html', bookings=user_bookings)
+
+
 @app.route('/login_user', methods=['GET', 'POST'])
 def login_user():
     error = None

@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Book {{ cameraman.name }}</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        /* --- Base Styles & Elegant Background --- */
+        body {
+            font-family: 'Poppins', 'Segoe UI', Arial, sans-serif;
+            background: #f4f7fc;
+            margin: 0;
+            padding: 0;
+            color: #333;
+        }
+
+        /* --- Navigation Bar (Consistent with other pages) --- */
+        nav {
+            background: #ffffff;
+            padding: 10px 0;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+            border-bottom: 1px solid #e8eaf0;
+        }
+        .nav-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        .nav-links a {
+            color: #555;
+            text-decoration: none;
+            margin-right: 25px;
+            font-size: 16px;
+            font-weight: 500;
+            transition: color 0.2s ease;
+        }
+        .nav-links a:hover {
+            color: #2575fc;
+        }
+        .nav-actions button {
+            color: #2575fc;
+            background: #eaf2ff;
+            border: 1px solid #d1e0ff;
+            text-decoration: none;
+            font-size: 15px;
+            font-weight: 600;
+            cursor: pointer;
+            font-family: inherit;
+            padding: 8px 18px;
+            border-radius: 8px;
+            transition: all 0.2s ease;
+        }
+        .nav-actions button:hover {
+            background: #2575fc;
+            color: #fff;
+            border-color: #2575fc;
+        }
+
+        /* --- Booking Form Container --- */
+        .booking-container {
+            max-width: 600px;
+            margin: 50px auto;
+            background: #ffffff;
+            border-radius: 16px;
+            box-shadow: 0 8px 35px rgba(0, 0, 0, 0.08);
+            padding: 40px;
+        }
+        h1, h2 {
+            color: #2c3e50;
+            text-align: center;
+            font-weight: 600;
+        }
+        h1 {
+            font-size: 2rem;
+            margin-bottom: 10px;
+        }
+        h2 {
+            font-size: 1.2rem;
+            font-weight: 500;
+            color: #666;
+            margin-bottom: 30px;
+        }
+        .price-tag {
+            text-align: center;
+            font-size: 1.3rem;
+            color: #27ae60;
+            font-weight: 600;
+            margin-bottom: 30px;
+        }
+        form {
+            margin-top: 20px;
+            border-top: 1px solid #e8eaf0;
+            padding-top: 30px;
+        }
+        label {
+            display: block;
+            font-size: 16px;
+            color: #333;
+            font-weight: 600;
+            margin-bottom: 10px;
+        }
+        input[type="date"] {
+            width: 100%;
+            padding: 12px 15px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            background: #fdfdfd;
+            font-size: 16px;
+            font-family: 'Poppins', sans-serif;
+            box-sizing: border-box; /* Important for width */
+            margin-bottom: 25px;
+        }
+        input[type="date"]:focus {
+            border-color: #2575fc;
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(37, 117, 252, 0.1);
+        }
+        button[type="submit"] {
+            width: 100%;
+            padding: 14px;
+            background: #2575fc;
+            color: #fff;
+            border: none;
+            border-radius: 10px;
+            font-size: 17px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background-color 0.2s, transform 0.15s;
+        }
+        button[type="submit"]:hover {
+            background: #1a5cbf;
+            transform: translateY(-2px);
+        }
+        
+        /* --- Flash Messages --- */
+        .flash-messages {
+            list-style: none;
+            padding: 0;
+            margin: 0 auto 20px auto;
+        }
+        .flash-messages li {
+            padding: 15px;
+            border-radius: 8px;
+            text-align: center;
+            font-weight: 500;
+        }
+        .flash-messages .error {
+            background-color: #f8d7da;
+            color: #721c24;
+        }
+    </style>
+</head>
+<body>
+
+    <nav>
+        <div class="nav-container">
+            <div class="nav-links">
+                <a href="{{ url_for('home_user') }}">Home</a>
+                <a href="{{ url_for('view_cameraman_profile', mobile=cameraman.mobile) }}">Back to Profile</a>
+            </div>
+            <div class="nav-actions">
+                <form action="{{ url_for('logout') }}" method="POST" style="margin: 0;">
+                    <button type="submit">Logout</button>
+                </form>
+            </div>
+        </div>
+    </nav>
+
+    <div class="booking-container">
+        <h1>Complete Your Booking</h1>
+        <h2>You are booking: <strong>{{ cameraman.name }}</strong></h2>
+        <div class="price-tag">Price: ₹{{ cameraman.price }}</div>
+
+        <!-- Flash Messages for this page -->
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                <ul class="flash-messages">
+                {% for category, message in messages %}
+                    <li class="{{ category }}">{{ message }}</li>
+                {% endfor %}
+                </ul>
+            {% endif %}
+        {% endwith %}
+
+        <form method="POST">
+            <label for="booking_date">Select a Date for Your Event</label>
+            <input type="date" id="booking_date" name="booking_date" required>
+            
+            <button type="submit">Confirm Booking Request</button>
+        </form>
+    </div>
+
+</body>
+</html>
