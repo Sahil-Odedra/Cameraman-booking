@@ -2,74 +2,182 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cameraman Profile</title>
-    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <title>{{ cameraman.name }}'s Dashboard</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
-        .profile-img {
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        /* --- Base Styles & Elegant Background --- */
+        body {
+            font-family: 'Poppins', 'Segoe UI', Arial, sans-serif;
+            background: #f4f7fc;
+            margin: 0;
+            padding: 0;
+            color: #333;
         }
-        .profile-img:hover {
-            transform: scale(1.05);
-            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+
+        /* --- Navigation Bar (Consistent with home.html) --- */
+        nav {
+            background: #ffffff;
+            padding: 10px 0;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+            border-bottom: 1px solid #e8eaf0;
+        }
+        .nav-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        .nav-title h1 {
+            color: #2c3e50;
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin: 0;
+        }
+        .nav-actions {
+            display: flex;
+            gap: 15px;
+        }
+        .nav-actions a, .nav-actions button {
+            text-decoration: none;
+            font-size: 15px;
+            font-weight: 600;
+            cursor: pointer;
+            font-family: inherit;
+            padding: 8px 18px;
+            border-radius: 8px;
+            transition: all 0.2s ease;
+        }
+        .edit-btn {
+            color: #2575fc;
+            background: #eaf2ff;
+            border: 1px solid #d1e0ff;
+        }
+        .edit-btn:hover {
+            background: #2575fc;
+            color: #fff;
+            border-color: #2575fc;
         }
         .logout-btn {
-            transition: background-color 0.3s ease, transform 0.2s ease;
+            color: #e74c3c;
+            background: #fdedec;
+            border: 1px solid #fbc6c1;
         }
         .logout-btn:hover {
-            transform: translateY(-2px);
+            background: #e74c3c;
+            color: #fff;
+            border-color: #e74c3c;
         }
-        .container {
-            animation: fadeIn 0.5s ease-in-out;
+
+        /* --- Profile Content Container --- */
+        .profile-container {
+            max-width: 700px;
+            margin: 50px auto;
+            background: #ffffff;
+            border-radius: 16px;
+            box-shadow: 0 8px 35px rgba(0, 0, 0, 0.08);
+            padding: 40px;
+            text-align: center;
         }
-        @keyframes fadeIn {
-            0% { opacity: 0; transform: translateY(10px); }
-            100% { opacity: 1; transform: translateY(0); }
+        .profile-img {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            object-fit: cover;
+            margin: 0 auto 20px auto;
+            border: 5px solid #fff;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+        }
+        .profile-container h2 {
+            color: #2c3e50;
+            font-size: 2.3rem;
+            font-weight: 700;
+            margin: 0 0 10px 0;
+        }
+        .profile-details {
+            text-align: left;
+            margin-top: 30px;
+            border-top: 1px solid #e8eaf0;
+            padding-top: 25px;
+        }
+        .detail-item {
+            display: flex;
+            margin-bottom: 15px;
+            font-size: 16px;
+        }
+        .detail-item strong {
+            color: #333;
+            font-weight: 600;
+            width: 150px; /* Aligns the details neatly */
+            flex-shrink: 0;
+        }
+        .detail-item span {
+            color: #555;
+        }
+        
+        /* --- Responsive Design --- */
+        @media (max-width: 700px) {
+            .profile-container { padding: 25px; margin: 30px 15px; }
+            .profile-container h2 { font-size: 2rem; }
         }
     </style>
 </head>
-<body class="bg-gray-100 min-h-screen flex items-center justify-center p-4">
-    <div class="container max-w-lg mx-auto bg-white rounded-2xl shadow-xl p-8 md:p-10">
-        <div class="text-center">
-            <h2 class="text-3xl font-bold text-gray-800 mb-6">Welcome, {{ cameraman.name }}</h2>
-            {% if cameraman.portfolio_img %}
-                <img class="profile-img mx-auto rounded-lg w-48 h-48 object-cover mb-6" src="{{ url_for('static', filename='images/' + cameraman.portfolio_img) }}" alt="Portfolio Image">
-            {% else %}
-                <div class="bg-gray-200 rounded-lg w-48 h-48 mx-auto mb-6 flex items-center justify-center text-gray-500">No Image</div>
-            {% endif %}
-        </div>
+<body>
 
-        <div class="space-y-4">
-            <div class="flex items-center">
-                <span class="font-semibold text-gray-700 w-32">Mobile:</span>
-                <span class="text-gray-600">{{ cameraman.mobile }}</span>
+    <nav>
+        <div class="nav-container">
+            <div class="nav-title">
+                <h1>My Profile</h1>
             </div>
-            <div class="flex items-center">
-                <span class="font-semibold text-gray-700 w-32">Email:</span>
-                <span class="text-gray-600">{{ cameraman.email }}</span>
-            </div>
-            <div class="flex items-center">
-                <span class="font-semibold text-gray-700 w-32">City:</span>
-                <span class="text-gray-600">{{ cameraman.city }}</span>
-            </div>
-            <div class="flex items-center">
-                <span class="font-semibold text-gray-700 w-32">Experience:</span>
-                <span class="text-gray-600">{{ cameraman.exp }} years</span>
-            </div>
-            <div class="flex items-center">
-                <span class="font-semibold text-gray-700 w-32">Price:</span>
-                <span class="text-gray-600">₹{{ cameraman.price }}</span>
-            </div>
-            <div class="flex items-start">
-                <span class="font-semibold text-gray-700 w-32">Description:</span>
-                <span class="text-gray-600">{{ cameraman.description }}</span>
+            <div class="nav-actions">
+                <!-- "Edit Profile" Button Added Here -->
+                 
+                <a href="{{ url_for('manage_bookings') }}" class="edit-btn">Bookings</a>
+                <a href="{{ url_for('update_cameraman') }}" class="edit-btn">Edit Profile</a>
+                <form action="{{ url_for('logout') }}" method="POST" style="margin: 0;">
+                    <button type="submit" class="logout-btn">Logout</button>
+                </form>
             </div>
         </div>
+    </nav>
 
-        <div class="mt-8 text-center">
-            <button class="logout-btn bg-blue-600 text-white font-semibold py-2 px-6 rounded-lg hover:bg-blue-700" onclick="document.getElementById('logout-form').submit()">Logout</button>
-            <form id="logout-form" action="/logout" method="post" class="hidden"></form>
+    <div class="profile-container">
+        {% if cameraman.portfolio_img %}
+            <img class="profile-img" src="{{ url_for('static', filename='images/' + cameraman.portfolio_img) }}" alt="Photo of {{ cameraman.name }}">
+        {% else %}
+            <img class="profile-img" src="{{ url_for('static', filename='images/default_avatar.png') }}" alt="Default Avatar">
+        {% endif %}
+
+        <h2>Welcome, {{ cameraman.name }}</h2>
+
+        <div class="profile-details">
+            <div class="detail-item">
+                <strong>Mobile:</strong>
+                <span>{{ cameraman.mobile }}</span>
+            </div>
+            <div class="detail-item">
+                <strong>Email:</strong>
+                <span>{{ cameraman.email }}</span>
+            </div>
+            <div class="detail-item">
+                <strong>City:</strong>
+                <span>{{ cameraman.city }}</span>
+            </div>
+            <div class="detail-item">
+                <strong>Experience:</strong>
+                <span>{{ cameraman.exp }} years</span>
+            </div>
+            <div class="detail-item">
+                <strong>Price:</strong>
+                <span>₹{{ cameraman.price }}</span>
+            </div>
+            <div class="detail-item">
+                <strong>Description:</strong>
+                <span>{{ cameraman.description }}</span>
+            </div>
         </div>
     </div>
+
 </body>
 </html>

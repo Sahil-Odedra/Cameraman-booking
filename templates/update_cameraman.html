@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Edit Your Profile</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Poppins', 'Segoe UI', Arial, sans-serif;
+            background: #f4f7fc;
+            margin: 0;
+            padding: 0;
+            color: #333;
+        }
+        nav {
+            background: #ffffff;
+            padding: 10px 0;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+            border-bottom: 1px solid #e8eaf0;
+        }
+        .nav-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        .nav-links a {
+            color: #555;
+            text-decoration: none;
+            margin-right: 25px;
+            font-size: 16px;
+            font-weight: 500;
+        }
+        .container {
+            max-width: 700px;
+            margin: 40px auto;
+            background: #ffffff;
+            border-radius: 16px;
+            box-shadow: 0 8px 35px rgba(0, 0, 0, 0.08);
+            padding: 40px;
+        }
+        h1 {
+            color: #2c3e50;
+            text-align: center;
+            font-weight: 600;
+            font-size: 2.2rem;
+            margin-bottom: 30px;
+        }
+        .form-group {
+            margin-bottom: 20px;
+        }
+        label {
+            display: block;
+            font-size: 15px;
+            color: #555;
+            font-weight: 500;
+            margin-bottom: 8px;
+        }
+        input, textarea {
+            width: 100%;
+            padding: 12px 15px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            background: #fdfdfd;
+            font-size: 15px;
+            font-family: 'Poppins', sans-serif;
+            box-sizing: border-box;
+        }
+        button {
+            width: 100%;
+            padding: 14px;
+            background: #2575fc;
+            color: #fff;
+            border: none;
+            border-radius: 10px;
+            font-size: 17px;
+            font-weight: 600;
+            cursor: pointer;
+            margin-top: 10px;
+            transition: background-color 0.2s;
+        }
+        button:hover {
+            background: #1a5cbf;
+        }
+        .password-section {
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 1px solid #e8eaf0;
+        }
+        .password-section h2 {
+            font-size: 1.4rem;
+            color: #2c3e50;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <nav>
+        <div class="nav-container">
+            <div class="nav-links">
+                <a href="{{ url_for('profile_cameraman',mobile=cameraman.mobile) }}">Back to Profile</a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <h1>Edit Your Profile</h1>
+        <form method="POST" enctype="multipart/form-data">
+            <!-- Standard Profile Fields -->
+            <div class="form-group">
+                <label for="name">Name</label>
+                <input type="text" id="name" name="name" value="{{ cameraman.name }}" required>
+            </div>
+            <div class="form-group">
+                <label for="email">Email</label>
+                <input type="email" id="email" name="email" value="{{ cameraman.email }}" required>
+            </div>
+            <div class="form-group">
+                <label for="city">City</label>
+                <input type="text" id="city" name="city" value="{{ cameraman.city }}" required>
+            </div>
+            <div class="form-group">
+                <label for="exp">Experience (Years)</label>
+                <input type="number" id="exp" name="exp" value="{{ cameraman.exp }}" required>
+            </div>
+            <div class="form-group">
+                <label for="price">Price per Event (₹)</label>
+                <input type="number" id="price" name="price" value="{{ cameraman.price }}" required>
+            </div>
+            <div class="form-group">
+                <label for="description">Description</label>
+                <textarea id="description" name="description" rows="4" required>{{ cameraman.description }}</textarea>
+            </div>
+            <div class="form-group">
+                <label for="portfolio_img">Update Portfolio Image (Optional)</label>
+                <input type="file" id="portfolio_img" name="portfolio_img">
+            </div>
+
+            <!-- Optional Password Change Section -->
+            <div class="password-section">
+                <h2>Change Password (Optional)</h2>
+                <p style="text-align: center; color: #666; margin-top: -15px; margin-bottom: 20px;">Leave these fields blank to keep your current password.</p>
+                <div class="form-group">
+                    <label for="current_password">Current Password</label>
+                    <input type="password" id="current_password" name="current_password">
+                </div>
+                <div class="form-group">
+                    <label for="new_password">New Password</label>
+                    <input type="password" id="new_password" name="new_password">
+                </div>
+                <div class="form-group">
+                    <label for="confirm_new_password">Confirm New Password</label>
+                    <input type="password" id="confirm_new_password" name="confirm_new_password">
+                </div>
+            </div>
+
+            <button type="submit">Save Changes</button>
+        </form>
+    </div>
+
+</body>
+</html>

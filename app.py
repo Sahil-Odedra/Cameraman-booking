@@ -104,13 +104,14 @@ def book_cameraman(cameraman_mobile):
 
         booking_date = datetime.strptime(booking_date_str, '%Y-%m-%d').date()
 
-        new_booking = Booking(
-            user_mobile=session['user_mobile'],
-            cameraman_mobile=cameraman.mobile,
-            booking_date=booking_date,
-            price=cameraman.price,
-            status='pending' 
-        )
+        # this is to avoid dublicates
+        existing_booking = Booking.query.filter_by(cameraman_mobile=cameraman_mobile,
+            booking_date=booking_date).first()
+        if existing_booking:
+            flash("Not Available on this date","error")
+            return redirect(url_for('book_cameraman',cameraman_mobile=cameraman_mobile))
+        new_booking = Booking(user_mobile=session['user_mobile'],cameraman_mobile=cameraman.mobile,
+        booking_date=booking_date, price=cameraman.price, status='pending')
 
         db.session.add(new_booking)
         db.session.commit()
@@ -119,6 +120,80 @@ def book_cameraman(cameraman_mobile):
         return redirect(url_for('home_user'))
    
     return render_template('book_cameraman.html', cameraman=cameraman)
+
+
+@app.route('/cameraman/update_cameraman', methods=['GET', 'POST'])
+def update_cameraman():
+    if 'cameraman_mobile' not in session:
+        flash("You must be logged in to edit your profile.", "error")
+        return redirect(url_for('login_cameraman'))
+
+    mobile = session['cameraman_mobile']
+    cameraman = Cameraman.query.get_or_404(mobile)
+
+    if request.method == 'POST':
+        cameraman.name = request.form['name']
+        cameraman.email = request.form['email']
+        cameraman.city = request.form['city']
+        cameraman.exp = int(request.form['exp'])
+        cameraman.price = int(request.form['price'])
+        cameraman.description = request.form['description']
+        
+        new_password=request.form.get('new_password')
+        confirm_password=request.form.get('confirm_password')
+        if new_password:
+            if confirm_password != new_password:
+                flash("Both the passwords do not match.","error")
+                return redirect(url_for('update_cameraman'))
+            cameraman.password=new_password
+            flash("Password updated Successfully","success")
+
+        file = request.files.get('portfolio_img')
+        if file and file.filename:
+            filename = secure_filename(cameraman.mobile + "_" + file.filename)
+            file.save(os.path.join(app.config['images'], filename))
+            cameraman.portfolio_img = filename
+
+        db.session.commit()
+
+        flash("Your profile has been updated successfully!", "success")
+        return redirect(url_for('profile_cameraman',mobile=cameraman.mobile))
+
+    return render_template('update_cameraman.html', cameraman=cameraman)
+
+
+@app.route('/cameraman/bookings')
+def manage_bookings():
+    if 'cameraman_mobile' not in session:
+        flash("You must be logged in to manage bookings.", "error")
+        return redirect(url_for('login_cameraman'))
+    mobile = session['cameraman_mobile']
+    
+    cameraman_bookings = db.session.query(Booking, User).join(
+        User, Booking.user_mobile == User.mobile
+    ).filter(Booking.cameraman_mobile == mobile).all()
+
+    return render_template('manage_bookings.html', bookings=cameraman_bookings)
+
+
+@app.route('/booking/accept/<int:booking_id>', methods=['POST'])
+def accept_booking(booking_id):
+    if 'cameraman_mobile' not in session:
+        flash("You are not authorized to perform this action.", "error")
+        return redirect(url_for('login_cameraman'))
+
+    booking = Booking.query.get_or_404(booking_id)
+
+    if booking.cameraman_mobile != session['cameraman_mobile']:
+        flash("You do not have permission to modify this booking.", "error")
+        return redirect(url_for('manage_bookings'))
+
+    booking.status = 'Accepted'
+    db.session.commit()
+
+    flash("Booking has been successfully accepted!", "success")
+    return redirect(url_for('manage_bookings'))
+
 
 
 @app.route('/my_bookings')

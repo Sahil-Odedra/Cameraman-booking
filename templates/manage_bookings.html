@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Manage Your Bookings</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Poppins', 'Segoe UI', Arial, sans-serif;
+            background: #f4f7fc;
+            margin: 0;
+            padding: 0;
+            color: #333;
+        }
+        nav {
+            background: #ffffff;
+            padding: 10px 0;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+            border-bottom: 1px solid #e8eaf0;
+        }
+        .nav-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        .nav-links a {
+            color: #555;
+            text-decoration: none;
+            font-size: 16px;
+            font-weight: 500;
+        }
+        .container {
+            max-width: 900px;
+            margin: 40px auto;
+            padding: 20px;
+        }
+        h1 {
+            color: #2c3e50;
+            text-align: center;
+            font-weight: 600;
+            font-size: 2.2rem;
+            margin-bottom: 30px;
+        }
+        .bookings-table {
+            width: 100%;
+            border-collapse: collapse;
+            background: #ffffff;
+            border-radius: 12px;
+            box-shadow: 0 5px 25px rgba(0, 0, 0, 0.07);
+            overflow: hidden;
+        }
+        .bookings-table th, .bookings-table td {
+            padding: 15px 20px;
+            text-align: left;
+        }
+        .bookings-table thead {
+            background-color: #f8f9fa;
+        }
+        .bookings-table th {
+            font-size: 14px;
+            font-weight: 600;
+            color: #666;
+            text-transform: uppercase;
+        }
+        .bookings-table tbody tr {
+            border-bottom: 1px solid #e8eaf0;
+        }
+        .bookings-table tbody tr:last-child {
+            border-bottom: none;
+        }
+        .status {
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-weight: 600;
+            font-size: 13px;
+            text-transform: capitalize;
+        }
+        .status-pending { background-color: #fff0c2; color: #856404; }
+        .status-accepted { background-color: #d4edda; color: #155724; }
+        .accept-btn {
+            background: #27ae60;
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 6px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+        .accept-btn:hover {
+            background: #219150;
+        }
+        .no-bookings {
+            text-align: center;
+            padding: 40px;
+            font-size: 18px;
+            color: #888;
+        }
+    </style>
+</head>
+<body>
+    <nav>
+        <div class="nav-container">
+            <div class="nav-links">
+                <a href="{{ url_for('profile_cameraman', mobile=session['cameraman_mobile']) }}">Back to Profile</a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <h1>Manage Bookings</h1>
+
+        {% if bookings %}
+            <table class="bookings-table">
+                <thead>
+                    <tr>
+                        <th>Customer Name</th>
+                        <th>Booking Date</th>
+                        <th>Status</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for booking, user in bookings %}
+                        <tr>
+                            <td>{{ user.name }}</td>
+                            <td>{{ booking.booking_date.strftime('%d %B, %Y') }}</td>
+                            <td>
+                                <span class="status status-{{ booking.status.lower() }}">{{ booking.status }}</span>
+                            </td>
+                            <td>
+                                {% if booking.status == 'pending' %}
+                                    <form action="{{ url_for('accept_booking', booking_id=booking.id) }}" method="POST">
+                                        <button type="submit" class="accept-btn">Accept</button>
+                                    </form>
+                                {% else %}
+                                    <!-- No action needed if already accepted -->
+                                    -
+                                {% endif %}
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        {% else %}
+            <div class="no-bookings">
+                <p>You have no booking requests at the moment.</p>
+            </div>
+        {% endif %}
+    </div>
+
+</body>
+</html>
