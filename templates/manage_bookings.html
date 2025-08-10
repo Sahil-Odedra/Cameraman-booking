@@ -80,7 +80,7 @@
         }
         .status-pending { background-color: #fff0c2; color: #856404; }
         .status-accepted { background-color: #d4edda; color: #155724; }
-        .accept-btn {
+        .accept-btn{
             background: #27ae60;
             color: white;
             border: none;
@@ -88,7 +88,18 @@
             border-radius: 6px;
             font-weight: 600;
             cursor: pointer;
+            width: 20vh;
+            margin: 7px;
             transition: background-color 0.2s;
+        }
+        .reject-btn{
+            background-color:#ca2929;
+            color: white;
+            padding: 8px 15px;
+            border: none;
+            margin: 7px;
+            border-radius: 6px;
+            width: 20vh;
         }
         .accept-btn:hover {
             background: #219150;
@@ -136,9 +147,12 @@
                                     <form action="{{ url_for('accept_booking', booking_id=booking.id) }}" method="POST">
                                         <button type="submit" class="accept-btn">Accept</button>
                                     </form>
-                                {% else %}
-                                    <!-- No action needed if already accepted -->
-                                    -
+                                    <form action="{{ url_for('reject_booking', booking_id=booking.id) }}" method="POST">
+                                        <button type="submit" class="reject-btn">Reject</button>
+                                    </form>
+                                <!-- {% else %}
+                                    No action needed if already accepted
+                                    - -->
                                 {% endif %}
                             </td>
                         </tr>

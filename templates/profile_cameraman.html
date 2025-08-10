@@ -109,7 +109,7 @@
         .detail-item strong {
             color: #333;
             font-weight: 600;
-            width: 150px; /* Aligns the details neatly */
+            width: 150px;
             flex-shrink: 0;
         }
         .detail-item span {
@@ -131,7 +131,6 @@
                 <h1>My Profile</h1>
             </div>
             <div class="nav-actions">
-                <!-- "Edit Profile" Button Added Here -->
                  
                 <a href="{{ url_for('manage_bookings') }}" class="edit-btn">Bookings</a>
                 <a href="{{ url_for('update_cameraman') }}" class="edit-btn">Edit Profile</a>

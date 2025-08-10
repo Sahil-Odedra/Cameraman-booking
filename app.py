@@ -7,8 +7,11 @@ from datetime import datetime
 from models import db, User, Cameraman, Booking
 from flask import flash, redirect, url_for, session, request
 from werkzeug.utils import secure_filename
+from flask_mail import Mail,Message
 
 app = Flask(__name__)
+app.config.from_object(config)
+mail=Mail(app)
 app.secret_key = 'cameramanbooking123'
 
 BASE_DIR = os.path.abspath(os.path.dirname(__file__))
@@ -116,6 +119,23 @@ def book_cameraman(cameraman_mobile):
         db.session.add(new_booking)
         db.session.commit()
 
+        #for sending mail
+        try:
+            user = User.query.get(session['user_mobile'])
+            msg=Message(subject="New Booking request",
+                    recipients=[cameraman.email],
+                    body=f'''
+                    Hello {cameraman.name}
+
+                    you have a new booking request from {user.name}
+                    Please login to accept or reject the request.
+
+                    Regards...
+                    ''')
+            mail.send(msg)
+        except:
+            flash("Unable to send Mail to the Cameraman, But your booking was successfull.")
+
         flash(f'Your booking request for {cameraman.name} has been sent!', 'success')
         return redirect(url_for('home_user'))
    
@@ -194,6 +214,24 @@ def accept_booking(booking_id):
     flash("Booking has been successfully accepted!", "success")
     return redirect(url_for('manage_bookings'))
 
+
+@app.route('/booking/reject/<int:booking_id>', methods=['POST'])
+def reject_booking(booking_id):
+    if 'cameraman_mobile' not in session:
+        flash("You are not authorized to perform this action.", "error")
+        return redirect(url_for('login_cameraman'))
+
+    booking = Booking.query.get_or_404(booking_id)
+
+    if booking.cameraman_mobile != session['cameraman_mobile']:
+        flash("You do not have permission to modify this booking.", "error")
+        return redirect(url_for('manage_bookings'))
+
+    booking.status = 'Rejected'
+    db.session.commit()
+
+    flash("Booking has been successfully Rejected!", "success")
+    return redirect(url_for('manage_bookings'))
 
 
 @app.route('/my_bookings')
