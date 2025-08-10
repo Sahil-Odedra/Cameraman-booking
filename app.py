@@ -283,8 +283,8 @@ def logout():
 def login_cameraman():
     error = None
     if request.method == 'POST':
-        mobile = request.form['mobile']
-        password = request.form['password']
+        mobile = request.form.get('mobile')
+        password = request.form.get('password')
         cameraman = Cameraman.query.get(mobile)
         if cameraman and cameraman.password == password:
             session['cameraman_mobile'] = cameraman.mobile
@@ -302,15 +302,15 @@ def home():
 @app.route('/register_cameraman', methods=['GET', 'POST'])
 def register_cameraman():
     if request.method == 'POST':
-        name = request.form['name']
-        email = request.form['email']
-        mobile = request.form['mobile']
-        password = request.form['password']
-        confirm_password = request.form['confirm_password']
-        city = request.form['city']
-        exp = request.form['exp']
-        price = request.form['price']
-        description = request.form['description']
+        name = request.form.get('name')
+        email = request.form.get('email')
+        mobile = request.form.get('mobile')
+        password = request.form.get('password')
+        confirm_password = request.form.get('confirm_password')
+        city = request.form.get('city')
+        exp = request.form.get('exp')
+        price = request.form.get('price')
+        description = request.form.get('description')
 
         if password != confirm_password:
             return "Passwords do not match. Please try again."
