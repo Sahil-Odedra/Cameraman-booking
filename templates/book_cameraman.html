@@ -5,7 +5,6 @@
     <title>Book {{ cameraman.name }}</title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
-        /* --- Base Styles & Elegant Background --- */
         body {
             font-family: 'Poppins', 'Segoe UI', Arial, sans-serif;
             background: #f4f7fc;
@@ -14,7 +13,6 @@
             color: #333;
         }
 
-        /* --- Navigation Bar (Consistent with other pages) --- */
         nav {
             background: #ffffff;
             padding: 10px 0;
@@ -59,7 +57,6 @@
             border-color: #2575fc;
         }
 
-        /* --- Booking Form Container --- */
         .booking-container {
             max-width: 600px;
             margin: 50px auto;
@@ -110,7 +107,7 @@
             background: #fdfdfd;
             font-size: 16px;
             font-family: 'Poppins', sans-serif;
-            box-sizing: border-box; /* Important for width */
+            box-sizing: border-box;
             margin-bottom: 25px;
         }
         input[type="date"]:focus {
@@ -135,7 +132,6 @@
             transform: translateY(-2px);
         }
         
-        /* --- Flash Messages --- */
         .flash-messages {
             list-style: none;
             padding: 0;
@@ -174,7 +170,6 @@
         <h2>You are booking: <strong>{{ cameraman.name }}</strong></h2>
         <div class="price-tag">Price: ₹{{ cameraman.price }}</div>
 
-        <!-- Flash Messages for this page -->
         {% with messages = get_flashed_messages(with_categories=true) %}
             {% if messages %}
                 <ul class="flash-messages">

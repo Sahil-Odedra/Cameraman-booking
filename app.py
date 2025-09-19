@@ -65,7 +65,7 @@ def view_cameraman_profile(mobile):
         return redirect(url_for('login_user'))
 
     cameraman = Cameraman.query.get_or_404(mobile)
-    
+
     return render_template('view_cameraman_profile.html', cameraman=cameraman)
 
 
@@ -315,7 +315,6 @@ def register_cameraman():
         if password != confirm_password:
             return "Passwords do not match. Please try again."
 
-        # File handling
         file = request.files['portfolio_img']
         filename = None
         if file and file.filename != '':

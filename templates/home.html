@@ -5,20 +5,18 @@
     <title>Home</title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
-        /* --- Base Styles & Elegant Background --- */
         body {
             font-family: 'Poppins', 'Segoe UI', Arial, sans-serif;
-            background: #f4f7fc; /* A clean, light blue-gray background */
+            background: #f4f7fc;
             margin: 0;
             padding: 0;
             color: #333;
         }
 
-        /* --- Navigation Bar --- */
         nav {
             background: #ffffff;
             color: #333;
-            padding: 10px 0; /* Adjusted padding */
+            padding: 10px 0;
             box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
             border-bottom: 1px solid #e8eaf0;
         }
@@ -60,15 +58,13 @@
             border-color: #2575fc;
         }
 
-
-        /* --- Main Content Container --- */
         .container {
             max-width: 1100px;
             margin: 40px auto;
             padding: 20px;
         }
         h1, h2 {
-            color: #2c3e50; /* A more professional, darker blue */
+            color: #2c3e50;
             text-align: center;
             font-weight: 600;
         }
@@ -82,7 +78,6 @@
             font-weight: 500;
         }
 
-        /* --- Search Form --- */
         form.search-form {
             display: flex;
             flex-wrap: wrap;
@@ -133,7 +128,6 @@
             transform: translateY(-2px);
         }
 
-        /* --- Cameraman Card Grid --- */
         .cameramen-list {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
@@ -145,7 +139,7 @@
             box-shadow: 0 5px 25px rgba(0, 0, 0, 0.07);
             text-align: center;
             transition: transform 0.2s ease, box-shadow 0.2s ease;
-            overflow: hidden; /* Ensures content respects the border radius */
+            overflow: hidden; 
         }
         .cameraman-card:hover {
             transform: translateY(-5px);
@@ -193,7 +187,6 @@
             grid-column: 1 / -1;
         }
 
-        /* --- Flash Messages --- */
         .flash-messages {
             list-style: none;
             padding: 0;
@@ -215,7 +208,6 @@
             color: #155724;
         }
 
-        /* --- Responsive Design --- */
         @media (max-width: 700px) {
             .container { padding: 20px 15px; }
             .search-form { flex-direction: column; gap: 15px; }
