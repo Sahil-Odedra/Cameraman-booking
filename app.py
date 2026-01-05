@@ -44,9 +44,9 @@ def home_user():
         try:
             booking_date_obj = datetime.strptime(search_date, '%Y-%m-%d').date()
             
-            booked_cameramen_subquery = db.session.query(Booking.cameraman_id).filter(Booking.booking_date == booking_date_obj, Booking.status == 'confirmed').subquery()
+            booked_cameramen_subquery = db.session.query(Booking.cameraman_mobile).filter(Booking.booking_date == booking_date_obj, Booking.status == 'confirmed').subquery()
             
-            query = query.filter(Cameraman.id.notin_(booked_cameramen_subquery))
+            query = query.filter(Cameraman.mobile.notin_(booked_cameramen_subquery))
         except ValueError:
             flash('Invalid date format provided. Please use YYYY-MM-DD.', 'error')
             pass
@@ -86,7 +86,7 @@ def register_user():
         db.session.add(new_user)
         db.session.commit()
 
-        return render_template('login_user.html')
+        return redirect(url_for('login_user'))
     return render_template('user_register.html')
 
 
